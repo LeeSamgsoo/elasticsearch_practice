@@ -31,8 +31,8 @@ public class ApiV1ArticleController {
     }
 
     @GetMapping("/{id}")
-    public String getArticle(@PathVariable(value = "id") Long id) {
-        return "단건";
+    public ArticleDTO getArticle(@PathVariable(value = "id") Long id) {
+        return new ArticleDTO(new Article("제목1", "내용1"));
     }
 
     @PostMapping("")
