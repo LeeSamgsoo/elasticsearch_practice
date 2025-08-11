@@ -37,7 +37,7 @@ public class ApiV1ArticleController {
 
     @PostMapping("")
     public ArticleDTO createArticle(@RequestParam("title") String title,
-                                @RequestParam("content") String content) {
+                                    @RequestParam("content") String content) {
         return this.articleService.articleCreate(title, content);
     }
 
