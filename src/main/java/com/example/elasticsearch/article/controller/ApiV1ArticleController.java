@@ -36,8 +36,9 @@ public class ApiV1ArticleController {
     }
 
     @PostMapping("")
-    public String createArticle() {
-        return "생성";
+    public ArticleDTO createArticle(@RequestParam("title") String title,
+                                @RequestParam("content") String content) {
+        return this.articleService.articleCreate(title, content);
     }
 
     @PatchMapping("/{id}")
