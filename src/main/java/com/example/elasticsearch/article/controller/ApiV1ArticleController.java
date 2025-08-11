@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class ApiV1ArticleController {
     private final ArticleService articleService;
 
+
     @GetMapping("")
     public String getArticles() {
         return "목록";
