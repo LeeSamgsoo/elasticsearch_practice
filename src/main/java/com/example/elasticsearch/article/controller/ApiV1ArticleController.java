@@ -10,28 +10,29 @@ import org.springframework.web.bind.annotation.*;
 public class ApiV1ArticleController {
     private final ArticleService articleService;
 
-    @GetMapping
+
+    @GetMapping("")
     public String getArticles() {
         return "목록";
     }
 
-    @GetMapping
-    public String getArticle() {
+    @GetMapping("/{id}")
+    public String getArticle(@PathVariable(value = "id") Long id) {
         return "단건";
     }
 
-    @PostMapping
+    @PostMapping("")
     public String createArticle() {
         return "생성";
     }
 
-    @PatchMapping
-    public String modifyArticle() {
+    @PatchMapping("/{id}")
+    public String modifyArticle(@PathVariable(value = "id") Long id) {
         return "수정";
     }
 
-    @DeleteMapping
-    public String deleteArticle() {
+    @DeleteMapping("/{id}")
+    public String deleteArticle(@PathVariable(value = "id") Long id) {
         return "삭제";
     }
 }
