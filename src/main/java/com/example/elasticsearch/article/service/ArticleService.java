@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,11 +22,7 @@ public class ArticleService {
     }
 
     public ArticleDTO getArticle(Long id) {
-        Article article = this.articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            throw new RuntimeException("존재하지 않는 게시글 입니다.");
-        }
-        return new ArticleDTO(article);
+        return this.articleRepository.findById(id).map(ArticleDTO::new).orElse(null);
     }
 
     public ArticleDTO articleCreate(String title, String content) {
