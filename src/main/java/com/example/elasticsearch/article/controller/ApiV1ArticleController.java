@@ -1,21 +1,20 @@
 package com.example.elasticsearch.article.controller;
 
-import co.elastic.clients.elasticsearch.nodes.Http;
 import com.example.elasticsearch.article.dto.ArticleDTO;
 import com.example.elasticsearch.article.request.ArticleCreateRequest;
 import com.example.elasticsearch.article.request.ArticleModifyRequest;
 import com.example.elasticsearch.article.response.*;
 import com.example.elasticsearch.article.service.ArticleService;
 import com.example.elasticsearch.global.rsData.RsData;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.web.bind.annotation.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
