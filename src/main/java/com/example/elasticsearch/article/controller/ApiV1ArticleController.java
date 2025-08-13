@@ -2,15 +2,18 @@ package com.example.elasticsearch.article.controller;
 
 import co.elastic.clients.elasticsearch.nodes.Http;
 import com.example.elasticsearch.article.dto.ArticleDTO;
-import com.example.elasticsearch.article.response.ArticleResponse;
-import com.example.elasticsearch.article.response.ArticlesResponse;
+import com.example.elasticsearch.article.request.ArticleCreateRequest;
+import com.example.elasticsearch.article.request.ArticleModifyRequest;
+import com.example.elasticsearch.article.response.*;
 import com.example.elasticsearch.article.service.ArticleService;
 import com.example.elasticsearch.global.rsData.RsData;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +33,7 @@ public class ApiV1ArticleController {
         return RsData.of(
                 "200",
                 "다건 조회 성공",
-                new ArticlesResponse(articleDTOList)
+                new ArticlesResponse(articleDTOList.stream().map(ArticleResponse::new).collect(Collectors.toList()))
         );
     }
 
@@ -39,8 +42,8 @@ public class ApiV1ArticleController {
         ArticleDTO articleDTO = this.articleService.getArticle(id);
         if (articleDTO == null) {
             return RsData.of(
-              "401",
-              "존재하지 않는 게시글 입니다."
+                    "401",
+                    "존재하지 않는 게시글 입니다."
             );
         }
         return RsData.of(
@@ -51,20 +54,52 @@ public class ApiV1ArticleController {
     }
 
     @PostMapping("")
-    public ArticleDTO createArticle(@RequestParam("title") String title,
-                                    @RequestParam("content") String content) {
-        return this.articleService.articleCreate(title, content);
+    public RsData<ArticleCreateResponse> createArticle(@Valid @RequestBody ArticleCreateRequest articleCreateRequest) {
+        ArticleDTO articleDTO = this.articleService.articleCreate(
+                articleCreateRequest.getTitle(),
+                articleCreateRequest.getContent()
+        );
+        return RsData.of(
+                "201",
+                "게시글 생성 성공",
+                new ArticleCreateResponse(articleDTO)
+        );
     }
 
     @PatchMapping("/{id}")
-    public ArticleDTO modifyArticle(@PathVariable(value = "id") Long id,
-                                    @RequestParam("title") String title,
-                                    @RequestParam("content") String content) {
-        return this.articleService.articleModify(id, title, content);
+    public RsData<ArticleModifyResponse> modifyArticle(@PathVariable(value = "id") Long id,
+                                                       @Valid @RequestBody ArticleModifyRequest articleModifyRequest) {
+        ArticleDTO articleDTO = this.articleService.articleModify(
+                id,
+                articleModifyRequest.getTitle(),
+                articleModifyRequest.getContent()
+        );
+        if (articleDTO == null) {
+            return RsData.of(
+                    "401",
+                    "존재하지 않는 게시글 입니다."
+            );
+        }
+        return RsData.of(
+                "200",
+                "게시글이 수정되었습니다.",
+                new ArticleModifyResponse(articleDTO)
+        );
     }
 
     @DeleteMapping("/{id}")
-    public ArticleDTO deleteArticle(@PathVariable(value = "id") Long id) {
-        return this.articleService.articleDelete(id);
+    public RsData<ArticleDeleteResponse> deleteArticle(@PathVariable(value = "id") Long id) {
+        ArticleDTO articleDTO = this.articleService.articleDelete(id);
+        if (articleDTO == null) {
+            return RsData.of(
+                    "400",
+                    "존재하지 않는 게시글 입니다."
+            );
+        }
+        return RsData.of(
+                "200",
+                "게시글이 삭제되었습니다.",
+                new ArticleDeleteResponse(articleDTO)
+        );
     }
 }
