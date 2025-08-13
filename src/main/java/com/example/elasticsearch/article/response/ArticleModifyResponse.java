@@ -12,7 +12,7 @@ public class ArticleModifyResponse {
     private final String content;
     private final LocalDateTime modifiedDate;
 
-    public ArticleModifyResponse (ArticleDTO articleDTO) {
+    public ArticleModifyResponse(ArticleDTO articleDTO) {
         this.id = articleDTO.getId();
         this.title = articleDTO.getTitle();
         this.content = articleDTO.getContent();

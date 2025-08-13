@@ -1,6 +1,5 @@
 package com.example.elasticsearch.article.controller;
 
-import co.elastic.clients.elasticsearch.nodes.Http;
 import com.example.elasticsearch.article.dto.ArticleDTO;
 import com.example.elasticsearch.article.request.ArticleCreateRequest;
 import com.example.elasticsearch.article.request.ArticleModifyRequest;
@@ -9,7 +8,6 @@ import com.example.elasticsearch.article.service.ArticleService;
 import com.example.elasticsearch.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -42,8 +40,8 @@ public class ApiV1ArticleController {
         ArticleDTO articleDTO = this.articleService.getArticle(id);
         if (articleDTO == null) {
             return RsData.of(
-              "401",
-              "존재하지 않는 게시글 입니다."
+                    "401",
+                    "존재하지 않는 게시글 입니다."
             );
         }
         return RsData.of(
@@ -68,7 +66,7 @@ public class ApiV1ArticleController {
 
     @PatchMapping("/{id}")
     public RsData<ArticleModifyResponse> modifyArticle(@PathVariable(value = "id") Long id,
-                                                                @Valid @RequestBody ArticleModifyRequest articleModifyRequest) {
+                                                       @Valid @RequestBody ArticleModifyRequest articleModifyRequest) {
         ArticleDTO articleDTO = this.articleService.articleModify(
                 id,
                 articleModifyRequest.getTitle(),
