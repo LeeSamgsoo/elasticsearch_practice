@@ -35,11 +35,11 @@ public class ArticleService {
     }
 
     public ArticleDTO articleModify(Long id, String title, String content) {
-        Article article = this.articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            throw new RuntimeException("존재하지 않는 게시글 입니다.");
+        Optional<Article> article = this.articleRepository.findById(id);
+        if (article.isEmpty()) {
+            return null;
         }
-        Article updateArticle = article.toBuilder()
+        Article updateArticle = article.get().toBuilder()
                 .title(title)
                 .content(content)
                 .build();
@@ -48,11 +48,11 @@ public class ArticleService {
     }
 
     public ArticleDTO articleDelete(Long id) {
-        Article article = this.articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            throw new RuntimeException("존재하지 않는 게시글 입니다.");
+        Optional<Article> article = this.articleRepository.findById(id);
+        if (article.isEmpty()) {
+            return null;
         }
-        this.articleRepository.delete(article);
-        return new ArticleDTO(article);
+        this.articleRepository.delete(article.get());
+        return new ArticleDTO(article.get());
     }
 }
