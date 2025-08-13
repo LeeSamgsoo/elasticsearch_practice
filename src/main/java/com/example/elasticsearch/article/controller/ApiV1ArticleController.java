@@ -1,5 +1,6 @@
 package com.example.elasticsearch.article.controller;
 
+import co.elastic.clients.elasticsearch.nodes.Http;
 import com.example.elasticsearch.article.dto.ArticleDTO;
 import com.example.elasticsearch.article.request.ArticleCreateRequest;
 import com.example.elasticsearch.article.request.ArticleModifyRequest;
@@ -8,6 +9,7 @@ import com.example.elasticsearch.article.service.ArticleService;
 import com.example.elasticsearch.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
