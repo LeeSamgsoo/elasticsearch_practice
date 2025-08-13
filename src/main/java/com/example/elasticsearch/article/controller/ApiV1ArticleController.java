@@ -17,22 +17,12 @@ public class ApiV1ArticleController {
 
     @GetMapping("")
     public List<ArticleDTO> getArticles() {
-        List<ArticleDTO> articleDTOList = new ArrayList<>();
-
-        Article article1 = new Article("제목1", "내용1");
-        Article article2 = new Article("제목2", "내용2");
-        Article article3 = new Article("제목3", "내용3");
-
-        articleDTOList.add(new ArticleDTO(article1));
-        articleDTOList.add(new ArticleDTO(article2));
-        articleDTOList.add(new ArticleDTO(article3));
-
-        return articleDTOList;
+        return this.articleService.getArticles();
     }
 
     @GetMapping("/{id}")
     public ArticleDTO getArticle(@PathVariable(value = "id") Long id) {
-        return new ArticleDTO(new Article("제목1", "내용1"));
+        return this.articleService.getArticle(id);
     }
 
     @PostMapping("")
@@ -42,12 +32,14 @@ public class ApiV1ArticleController {
     }
 
     @PatchMapping("/{id}")
-    public String modifyArticle(@PathVariable(value = "id") Long id) {
-        return "수정";
+    public ArticleDTO modifyArticle(@PathVariable(value = "id") Long id,
+                                    @RequestParam("title") String title,
+                                    @RequestParam("content") String content) {
+        return this.articleService.articleModify(id, title, content);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteArticle(@PathVariable(value = "id") Long id) {
-        return "삭제";
+    public ArticleDTO deleteArticle(@PathVariable(value = "id") Long id) {
+        return this.articleService.articleDelete(id);
     }
 }
