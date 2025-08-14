@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "api/v1/articles", produces = APPLICATION_JSON_VALUE, consumes = APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/v1/articles")
 @Tag(name = "ApiV1ArticleController", description = "게시물 CRUD API")
 public class ApiV1ArticleController {
     private final ArticleService articleService;
