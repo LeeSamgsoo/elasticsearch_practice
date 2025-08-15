@@ -1,10 +1,10 @@
-package com.example.elasticsearch.article.controller;
+package com.example.elasticsearch.domain.article.controller;
 
-import com.example.elasticsearch.article.dto.ArticleDTO;
-import com.example.elasticsearch.article.request.ArticleCreateRequest;
-import com.example.elasticsearch.article.request.ArticleModifyRequest;
-import com.example.elasticsearch.article.response.*;
-import com.example.elasticsearch.article.service.ArticleService;
+import com.example.elasticsearch.domain.article.dto.ArticleDTO;
+import com.example.elasticsearch.domain.article.request.ArticleCreateRequest;
+import com.example.elasticsearch.domain.article.request.ArticleModifyRequest;
+import com.example.elasticsearch.domain.article.service.ArticleService;
+import com.example.elasticsearch.domain.article.response.*;
 import com.example.elasticsearch.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

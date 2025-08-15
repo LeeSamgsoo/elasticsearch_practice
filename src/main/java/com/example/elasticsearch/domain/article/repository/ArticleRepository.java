@@ -1,6 +1,6 @@
-package com.example.elasticsearch.article.repository;
+package com.example.elasticsearch.domain.article.repository;
 
-import com.example.elasticsearch.article.entity.Article;
+import com.example.elasticsearch.domain.article.entity.Article;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

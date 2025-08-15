@@ -1,8 +1,8 @@
-package com.example.elasticsearch.article.service;
+package com.example.elasticsearch.domain.article.service;
 
-import com.example.elasticsearch.article.dto.ArticleDTO;
-import com.example.elasticsearch.article.entity.Article;
-import com.example.elasticsearch.article.repository.ArticleRepository;
+import com.example.elasticsearch.domain.article.dto.ArticleDTO;
+import com.example.elasticsearch.domain.article.entity.Article;
+import com.example.elasticsearch.domain.article.repository.ArticleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
