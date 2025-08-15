@@ -9,14 +9,12 @@ import java.time.LocalDateTime;
 public class MemberDTO {
     private final Long id;
     private final String username;
-    private final String password;
     private final LocalDateTime createdDate;
     private final LocalDateTime modifiedDate;
 
     public MemberDTO(Member member) {
         this.id = member.getId();
         this.username = member.getUsername();
-        this.password = member.getPassword();
         this.createdDate = member.getCreatedDate();
         this.modifiedDate = member.getModifiedDate();
     }
