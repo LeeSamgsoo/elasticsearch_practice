@@ -1,0 +1,20 @@
+package com.example.elasticsearch.domain.member.entity;
+
+import com.example.elasticsearch.global.jpa.BaseEntity;
+import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
+
+@Entity
+@Getter
+@SuperBuilder(toBuilder = true)
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString(callSuper = true)
+public class Member extends BaseEntity {
+    private String username;
+    private String password;
+}

@@ -1,6 +1,6 @@
-package com.example.elasticsearch.article.response;
+package com.example.elasticsearch.domain.article.response;
 
-import com.example.elasticsearch.article.dto.ArticleDTO;
+import com.example.elasticsearch.domain.article.dto.ArticleDTO;
 import lombok.Getter;
 
 @Getter

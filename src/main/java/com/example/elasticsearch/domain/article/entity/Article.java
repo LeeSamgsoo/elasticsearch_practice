@@ -1,4 +1,4 @@
-package com.example.elasticsearch.article.entity;
+package com.example.elasticsearch.domain.article.entity;
 
 import com.example.elasticsearch.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;

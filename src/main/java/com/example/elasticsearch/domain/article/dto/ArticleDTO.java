@@ -1,6 +1,6 @@
-package com.example.elasticsearch.article.dto;
+package com.example.elasticsearch.domain.article.dto;
 
-import com.example.elasticsearch.article.entity.Article;
+import com.example.elasticsearch.domain.article.entity.Article;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
