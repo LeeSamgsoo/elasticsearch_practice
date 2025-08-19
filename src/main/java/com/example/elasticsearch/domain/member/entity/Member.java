@@ -1,6 +1,8 @@
 package com.example.elasticsearch.domain.member.entity;
 
 import com.example.elasticsearch.global.jpa.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,6 +17,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @ToString(callSuper = true)
 public class Member extends BaseEntity {
+    @Column(unique = true)
     private String username;
+    @JsonIgnore
     private String password;
 }

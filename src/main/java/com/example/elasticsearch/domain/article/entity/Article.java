@@ -1,7 +1,9 @@
 package com.example.elasticsearch.domain.article.entity;
 
+import com.example.elasticsearch.domain.member.entity.Member;
 import com.example.elasticsearch.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,4 +19,7 @@ import lombok.experimental.SuperBuilder;
 public class Article extends BaseEntity {
     private String title;
     private String content;
+
+    @ManyToOne
+    private Member member;
 }
