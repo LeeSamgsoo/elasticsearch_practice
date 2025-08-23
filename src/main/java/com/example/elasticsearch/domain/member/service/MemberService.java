@@ -4,6 +4,7 @@ import com.example.elasticsearch.domain.member.entity.Member;
 import com.example.elasticsearch.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Service;
 @Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void memberJoin(String username, String password) {
         Member member = Member.builder()
                 .username(username)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .build();
         this.memberRepository.save(member);
     }
