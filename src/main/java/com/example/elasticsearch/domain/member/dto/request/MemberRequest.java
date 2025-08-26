@@ -1,4 +1,4 @@
-package com.example.elasticsearch.domain.member.request;
+package com.example.elasticsearch.domain.member.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
