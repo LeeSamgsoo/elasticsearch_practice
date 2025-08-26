@@ -1,4 +1,4 @@
-package com.example.elasticsearch.domain.article.response;
+package com.example.elasticsearch.domain.article.dto.response;
 
 import com.example.elasticsearch.domain.article.dto.ArticleDTO;
 import lombok.Getter;
@@ -6,16 +6,16 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class ArticleCreateResponse {
+public class ArticleModifyResponse {
     private final Long id;
     private final String title;
     private final String content;
-    private final LocalDateTime createdDate;
+    private final LocalDateTime modifiedDate;
 
-    public ArticleCreateResponse(ArticleDTO articleDTO) {
+    public ArticleModifyResponse(ArticleDTO articleDTO) {
         this.id = articleDTO.getId();
         this.title = articleDTO.getTitle();
         this.content = articleDTO.getContent();
-        this.createdDate = articleDTO.getCreatedDate();
+        this.modifiedDate = articleDTO.getModifiedDate();
     }
 }
