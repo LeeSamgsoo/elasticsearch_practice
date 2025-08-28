@@ -1,5 +1,6 @@
 package com.example.elasticsearch.domain.member.service;
 
+import com.example.elasticsearch.domain.member.dto.MemberDTO;
 import com.example.elasticsearch.domain.member.entity.Member;
 import com.example.elasticsearch.domain.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
@@ -14,7 +15,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Member join(String username, String password) {
+    public MemberDTO memberJoin(String username, String password) {
         Member checkedMember = this.memberRepository.findByUsername(username);
         if (checkedMember != null) {
             throw new RuntimeException("이미 가입됩 사용자 입니다.");
@@ -24,6 +25,6 @@ public class MemberService {
                 .password(passwordEncoder.encode(password))
                 .build();
         this.memberRepository.save(member);
-        return member;
+        return new MemberDTO(member);
     }
 }
