@@ -1,12 +1,11 @@
 package com.example.elasticsearch.global.jwt;
 
-import com.example.elasticsearch.domain.member.entity.Member;
+
+import com.example.elasticsearch.domain.member.dto.MemberDTO;
 import com.example.elasticsearch.global.util.Util;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import lombok.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -40,22 +39,22 @@ public class JwtProvider {
     }
 
     // refreshToken 토큰 만들기
-    public String genRefreshToken(Member member) {
-        return genToken(member, 60 * 60 * 24 * 365 * 1);
+    public String genRefreshToken(MemberDTO memberDTO) {
+        return genToken(memberDTO, 60 * 60 * 24 * 365 * 1);
     }
 
     // accessToken 만들기
-    public String genAccessToken(Member member) {
-        return genToken(member, 60 * 10);
+    public String genAccessToken(MemberDTO memberDTO) {
+        return genToken(memberDTO, 60 * 10);
     }
 
 
     // 토큰 생성
-    public String genToken (Member member, int seconds) {
+    public String genToken(MemberDTO memberDTO, int seconds) {
         Map<String, Object> claims = new HashMap<>();
 
-        claims.put("id", member.getId());
-        claims.put("username", member.getUsername());
+        claims.put("id", memberDTO.getId());
+        claims.put("username", memberDTO.getUsername());
 
         long now = new Date().getTime();
         Date accessTokenExpiresIn = new Date(now + 1000L * seconds);
