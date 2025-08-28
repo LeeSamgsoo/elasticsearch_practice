@@ -1,19 +1,17 @@
 package com.example.elasticsearch.domain.member.dto.response;
 
-import com.example.elasticsearch.domain.member.entity.Member;
-import lombok.AllArgsConstructor;
+import com.example.elasticsearch.domain.member.dto.MemberDTO;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-@AllArgsConstructor
 public class MemberResponse {
     private final String username;
     private final LocalDateTime createdDate;
 
-    public MemberResponse (Member member) {
-        this.username = member.getUsername();
-        this.createdDate = member.getCreatedDate();
+    public MemberResponse(MemberDTO memberDTO) {
+        this.username = memberDTO.getUsername();
+        this.createdDate = memberDTO.getCreatedDate();
     }
 }

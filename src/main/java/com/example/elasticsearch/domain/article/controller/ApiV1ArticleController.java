@@ -5,7 +5,6 @@ import com.example.elasticsearch.domain.article.dto.request.ArticleCreateRequest
 import com.example.elasticsearch.domain.article.dto.request.ArticleModifyRequest;
 import com.example.elasticsearch.domain.article.dto.response.*;
 import com.example.elasticsearch.domain.article.service.ArticleService;
-import com.example.elasticsearch.domain.article.response.*;
 import com.example.elasticsearch.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

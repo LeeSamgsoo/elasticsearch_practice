@@ -1,7 +1,10 @@
 package com.example.elasticsearch.domain.member.controller;
 
+import com.example.elasticsearch.domain.member.dto.MemberDTO;
 import com.example.elasticsearch.domain.member.dto.request.MemberRequest;
+import com.example.elasticsearch.domain.member.dto.response.MemberResponse;
 import com.example.elasticsearch.domain.member.service.MemberService;
+import com.example.elasticsearch.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +19,15 @@ public class ApiV1MemberController {
     private final MemberService memberService;
 
     @PostMapping("/join")
-    public String memberJoin (@Valid @RequestBody MemberRequest memberRequest) {
-        this.memberService.memberJoin(
+    public RsData<MemberResponse> memberJoin (@Valid @RequestBody MemberRequest memberRequest) {
+        MemberDTO memberDTO = this.memberService.memberJoin(
                 memberRequest.getUsername(),
                 memberRequest.getPassword()
         );
-        return "가입완료";
+        return RsData.of(
+                "200",
+                "회원 가입 완료",
+                new MemberResponse(memberDTO)
+        );
     }
 }
