@@ -27,4 +27,13 @@ public class MemberService {
         this.memberRepository.save(member);
         return new MemberDTO(member);
     }
+
+    public MemberDTO memberLogin(String username, String password) {
+        Member member = this.memberRepository.findByUsername(username);
+        if (member == null) {
+            throw new RuntimeException("존재하지 않는 사용자 입니다.");
+        }
+
+        return new MemberDTO(member);
+    }
 }
