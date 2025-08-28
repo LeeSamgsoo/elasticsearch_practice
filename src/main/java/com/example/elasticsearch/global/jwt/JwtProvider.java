@@ -1,5 +1,6 @@
 package com.example.elasticsearch.global.jwt;
 
+
 import com.example.elasticsearch.domain.member.dto.MemberDTO;
 import com.example.elasticsearch.global.util.Util;
 import io.jsonwebtoken.Jwts;
