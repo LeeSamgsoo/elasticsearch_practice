@@ -7,9 +7,14 @@ import com.example.elasticsearch.domain.member.service.MemberService;
 import com.example.elasticsearch.global.jwt.JwtProvider;
 import com.example.elasticsearch.global.rsData.RsData;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @RestController
@@ -34,16 +39,40 @@ public class ApiV1MemberController {
     }
 
     @PostMapping("/login")
-    public RsData<?> memberLogin (@Valid @RequestBody MemberRequest memberRequest) {
+    public RsData<MemberResponse> memberLogin (@Valid @RequestBody MemberRequest memberRequest,
+                                               HttpServletResponse res) {
         MemberDTO memberDTO = this.memberService.memberLogin(
                 memberRequest.getUsername(),
                 memberRequest.getPassword()
         );
-        String token = this.jwtProvider.genAccessToken(memberDTO);
+
+        String accessToken = this.jwtProvider.genAccessToken(memberDTO);
+        res.addCookie(new Cookie("accessToken", accessToken));
+
         return RsData.of(
                 "200",
-                "로그인 성공",
-                token
+                "로그인 성공" + accessToken,
+                new MemberResponse(memberDTO)
+        );
+    }
+
+    @GetMapping("/me")
+    public RsData<MemberResponse> memberGetMyInfo (HttpServletRequest req) {
+        Cookie[] cookies = req.getCookies();
+        String accessToken = "";
+        for (Cookie cookie : cookies) {
+            if ("accessToken".equals(cookie.getName())) {
+                accessToken = cookie.getValue();
+            }
+        }
+
+        Map<String, Object> claims = this.jwtProvider.getClaims(accessToken);
+        String username = (String) claims.get("username");
+        MemberDTO memberDTO = this.memberService.getMember(username);
+        return RsData.of(
+                "200",
+                "내 회원정보",
+                new MemberResponse(memberDTO)
         );
     }
 }
