@@ -47,7 +47,12 @@ public class ApiV1MemberController {
         );
 
         String accessToken = this.jwtProvider.genAccessToken(memberDTO);
-        res.addCookie(new Cookie("accessToken", accessToken));
+        Cookie cookie = new Cookie("accessToken", accessToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60);
+        res.addCookie(cookie);
 
         return RsData.of(
                 "200",
