@@ -3,6 +3,8 @@ package com.example.elasticsearch.domain.member.service;
 import com.example.elasticsearch.domain.member.dto.MemberDTO;
 import com.example.elasticsearch.domain.member.entity.Member;
 import com.example.elasticsearch.domain.member.repository.MemberRepository;
+import com.example.elasticsearch.global.jwt.JwtProvider;
+import com.example.elasticsearch.global.rsData.RsData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     public MemberDTO memberJoin(String username, String password) {
         Member checkedMember = this.memberRepository.findByUsername(username);
@@ -44,5 +47,19 @@ public class MemberService {
         }
 
         return new MemberDTO(member);
+    }
+
+    public boolean validateToken (String accessToken) {
+        return this.jwtProvider.verify(accessToken);
+    }
+
+    public RsData<String> refreshAccessToken (String refreshToken) {
+        Member member = this.memberRepository.findByRefreshToken(refreshToken).orElseThrow(RuntimeException::new);
+        String accessToken = this.jwtProvider.genAccessToken(new MemberDTO(member));
+        return RsData.of(
+                "200",
+                "토큰 갱신 성공",
+                accessToken
+        );
     }
 }
