@@ -5,10 +5,16 @@ import com.example.elasticsearch.domain.member.entity.Member;
 import com.example.elasticsearch.domain.member.repository.MemberRepository;
 import com.example.elasticsearch.global.jwt.JwtProvider;
 import com.example.elasticsearch.global.rsData.RsData;
+import com.example.elasticsearch.global.security.SecurityUser;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +67,15 @@ public class MemberService {
                 "토큰 갱신 성공",
                 accessToken
         );
+    }
+
+    public SecurityUser getUserFromAccessToken(String accessToken) {
+        Map<String, Object> payloadBody = jwtProvider.getClaims(accessToken);
+
+        long id = (int) payloadBody.get("id");
+        String username = (String) payloadBody.get("username");
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        return new SecurityUser(id, username, "", authorities);
     }
 }
