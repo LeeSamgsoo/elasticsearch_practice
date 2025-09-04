@@ -33,6 +33,12 @@ public class MemberService {
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .build();
+
+        String refreshToken = this.jwtProvider.genRefreshToken(new MemberDTO(member));
+        member.toBuilder()
+                .refreshToken(refreshToken)
+                .build();
+
         this.memberRepository.save(member);
         return new MemberDTO(member);
     }
