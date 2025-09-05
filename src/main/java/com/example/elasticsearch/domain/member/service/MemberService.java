@@ -48,6 +48,9 @@ public class MemberService {
         if (member == null) {
             throw new RuntimeException("존재하지 않는 사용자 입니다.");
         }
+        if (!passwordEncoder.matches(password, member.getPassword())) {
+            throw new RuntimeException("비밀번호가 일치하지 않습니다.");
+        }
 
         return new MemberDTO(member);
     }
