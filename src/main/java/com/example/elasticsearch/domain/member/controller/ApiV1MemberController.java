@@ -26,7 +26,7 @@ public class ApiV1MemberController {
     private final JwtProvider jwtProvider;
 
     @PostMapping("/join")
-    public RsData<MemberResponse> memberJoin (@Valid @RequestBody MemberRequest memberRequest) {
+    public RsData<MemberResponse> memberJoin(@Valid @RequestBody MemberRequest memberRequest) {
         MemberDTO memberDTO = this.memberService.memberJoin(
                 memberRequest.getUsername(),
                 memberRequest.getPassword()
@@ -39,8 +39,8 @@ public class ApiV1MemberController {
     }
 
     @PostMapping("/login")
-    public RsData<MemberResponse> memberLogin (@Valid @RequestBody MemberRequest memberRequest,
-                                               HttpServletResponse res) {
+    public RsData<MemberResponse> memberLogin(@Valid @RequestBody MemberRequest memberRequest,
+                                              HttpServletResponse res) {
         MemberDTO memberDTO = this.memberService.memberLogin(
                 memberRequest.getUsername(),
                 memberRequest.getPassword()
@@ -70,7 +70,7 @@ public class ApiV1MemberController {
     }
 
     @GetMapping("/me")
-    public RsData<MemberResponse> memberGetMyInfo (HttpServletRequest req) {
+    public RsData<MemberResponse> memberGetMyInfo(HttpServletRequest req) {
         Cookie[] cookies = req.getCookies();
         String accessToken = "";
         for (Cookie cookie : cookies) {
@@ -86,6 +86,24 @@ public class ApiV1MemberController {
                 "200",
                 "내 회원정보",
                 new MemberResponse(memberDTO)
+        );
+    }
+
+    @GetMapping("/logout")
+    public RsData<?> memberLogout(HttpServletResponse res) {
+        Cookie accessTokenCookie = new Cookie("accessToken", null);
+        accessTokenCookie.setPath("/");
+        accessTokenCookie.setMaxAge(0);
+        res.addCookie(accessTokenCookie);
+
+        Cookie refreshTokenCookie = new Cookie("refreshToken", null);
+        refreshTokenCookie.setPath("/");
+        refreshTokenCookie.setMaxAge(0);
+        res.addCookie(refreshTokenCookie);
+
+        return RsData.of(
+                "200",
+                "로그아웃 성공"
         );
     }
 }
