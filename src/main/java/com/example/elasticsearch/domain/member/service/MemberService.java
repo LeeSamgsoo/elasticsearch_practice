@@ -25,7 +25,7 @@ public class MemberService {
     private final JwtProvider jwtProvider;
 
     public MemberDTO memberJoin(String username, String password) {
-        Member checkedMember = this.memberRepository.findByUsername(username);
+        Member checkedMember = this.memberRepository.findByUsername(username).orElse(null);
         if (checkedMember != null) {
             throw new RuntimeException("이미 가입됩 사용자 입니다.");
         }
@@ -44,7 +44,7 @@ public class MemberService {
     }
 
     public MemberDTO memberLogin(String username, String password) {
-        Member member = this.memberRepository.findByUsername(username);
+        Member member = this.memberRepository.findByUsername(username).orElse(null);
         if (member == null) {
             throw new RuntimeException("존재하지 않는 사용자 입니다.");
         }
@@ -56,7 +56,7 @@ public class MemberService {
     }
 
     public MemberDTO getMember (String username) {
-        Member member = this.memberRepository.findByUsername(username);
+        Member member = this.memberRepository.findByUsername(username).orElse(null);
         if (member == null) {
             throw new RuntimeException("존재하지 않는 사용자 입니다.");
         }

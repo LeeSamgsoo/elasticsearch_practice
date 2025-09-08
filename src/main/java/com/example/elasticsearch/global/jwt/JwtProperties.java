@@ -11,4 +11,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "custom.jwt")
 public class JwtProperties {
     private String secretKey;
+    private String accessExpSeconds;
+    private String refreshExpSeconds;
 }
