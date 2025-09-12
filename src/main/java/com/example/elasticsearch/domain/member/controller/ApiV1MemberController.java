@@ -12,8 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.Map;
 
 
@@ -24,6 +29,7 @@ import java.util.Map;
 public class ApiV1MemberController {
     private final MemberService memberService;
     private final JwtProvider jwtProvider;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/join")
     public RsData<MemberResponse> memberJoin(@Valid @RequestBody MemberRequest memberRequest) {
@@ -45,6 +51,15 @@ public class ApiV1MemberController {
                 memberRequest.getUsername(),
                 memberRequest.getPassword()
         );
+
+        Authentication auth = this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        memberRequest.getUsername(),
+                        memberRequest.getPassword()
+                )
+        );
+
+        Collection<? extends GrantedAuthority> auths = auth.getAuthorities();
 
         String accessToken = this.jwtProvider.genAccessToken(memberDTO);
         Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
