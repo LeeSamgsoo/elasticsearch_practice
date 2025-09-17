@@ -47,16 +47,16 @@ public class ApiV1MemberController {
     @PostMapping("/login")
     public RsData<MemberResponse> memberLogin(@Valid @RequestBody MemberRequest memberRequest,
                                               HttpServletResponse res) {
-        MemberDTO memberDTO = this.memberService.memberLogin(
-                memberRequest.getUsername(),
-                memberRequest.getPassword()
-        );
-
         Authentication auth = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         memberRequest.getUsername(),
                         memberRequest.getPassword()
                 )
+        );
+
+        MemberDTO memberDTO = this.memberService.memberLogin(
+                memberRequest.getUsername(),
+                memberRequest.getPassword()
         );
 
         Collection<? extends GrantedAuthority> auths = auth.getAuthorities();
