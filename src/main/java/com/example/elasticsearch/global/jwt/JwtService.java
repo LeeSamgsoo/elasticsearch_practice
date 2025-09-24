@@ -28,9 +28,8 @@ public class JwtService {
         return cachedKey;
     }
 
-    public String createAccessToken(Long id, String username, Collection<? extends GrantedAuthority> auths) {
+    public String createAccessToken(String username, Collection<? extends GrantedAuthority> auths) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", id);
         claims.put("username", username);
         claims.put("roles", auths.stream().map(GrantedAuthority::getAuthority).toArray(String[]::new));
         Date exp = new Date(System.currentTimeMillis() + 1000L * props.getAccessExpSeconds());
@@ -41,8 +40,8 @@ public class JwtService {
                 .compact();
     }
 
-    public String createRefreshToken(Long id, String username) {
-        Map<String, Object> claims = Map.of("id", id, "username", username);
+    public String createRefreshToken(String username) {
+        Map<String, Object> claims = Map.of("username", username);
         Date exp = new Date(System.currentTimeMillis() + 1000L * props.getRefreshExpSeconds());
         return Jwts.builder()
                 .setClaims(claims)

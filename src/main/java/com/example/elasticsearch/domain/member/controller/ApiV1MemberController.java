@@ -4,8 +4,10 @@ import com.example.elasticsearch.domain.member.dto.MemberDTO;
 import com.example.elasticsearch.domain.member.dto.request.MemberRequest;
 import com.example.elasticsearch.domain.member.dto.response.MemberResponse;
 import com.example.elasticsearch.domain.member.service.MemberService;
-import com.example.elasticsearch.global.jwt.JwtProvider;
+import com.example.elasticsearch.global.jwt.JwtProperties;
+import com.example.elasticsearch.global.jwt.JwtService;
 import com.example.elasticsearch.global.rsData.RsData;
+import com.example.elasticsearch.global.util.CookieUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +30,8 @@ import java.util.Map;
 @Tag(name = "ApiV1MemberController", description = "회원 인증 인가 API")
 public class ApiV1MemberController {
     private final MemberService memberService;
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtService;
+    private final JwtProperties props;
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/join")
@@ -61,21 +64,11 @@ public class ApiV1MemberController {
 
         Collection<? extends GrantedAuthority> auths = auth.getAuthorities();
 
-        String accessToken = this.jwtProvider.genAccessToken(memberDTO);
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setSecure(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(60 * 60);
-        res.addCookie(accessTokenCookie);
+        String accessToken  = jwtService.createAccessToken(memberDTO.getUsername(), auths);
+        String refreshToken = jwtService.createRefreshToken(memberDTO.getUsername());
 
-        String refreshToken = memberDTO.getRefreshToken();
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setSecure(true);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(60 * 60);
-        res.addCookie(refreshTokenCookie);
+        CookieUtil.addHttpOnlyCookie(res, "accessToken", accessToken,  props.getAccessExpSeconds());
+        CookieUtil.addHttpOnlyCookie(res, "refreshToken", refreshToken, props.getRefreshExpSeconds());
 
         return RsData.of(
                 "200",
@@ -94,7 +87,7 @@ public class ApiV1MemberController {
             }
         }
 
-        Map<String, Object> claims = this.jwtProvider.getClaims(accessToken);
+        Map<String, Object> claims = this.jwtService.parse(accessToken);
         String username = (String) claims.get("username");
         MemberDTO memberDTO = this.memberService.getMember(username);
         return RsData.of(

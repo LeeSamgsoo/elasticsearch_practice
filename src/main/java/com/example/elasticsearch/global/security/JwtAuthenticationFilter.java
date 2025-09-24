@@ -45,12 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String refresh = CookieUtil.getCookie(req, "refreshToken");
             if (!refresh.isBlank() && jwtService.isValid(refresh)) {
                 Claims c = jwtService.parse(refresh);
-                Long id = ((Number) c.get("id")).longValue();
                 String username = c.get("username", String.class);
 
                 // 권한은 최소 기본권한 부여 또는 DB 조회 후 반영
                 List<GrantedAuthority> auths = List.of(new SimpleGrantedAuthority("ROLE_USER"));
-                String newAccess = jwtService.createAccessToken(id, username, auths);
+                String newAccess = jwtService.createAccessToken(username, auths);
                 CookieUtil.addHttpOnlyCookie(resp, "accessToken", newAccess,  props.getAccessExpSeconds());
 
                 Authentication auth = jwtService.toAuthentication(newAccess);

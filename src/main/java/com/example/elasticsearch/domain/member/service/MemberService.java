@@ -3,16 +3,20 @@ package com.example.elasticsearch.domain.member.service;
 import com.example.elasticsearch.domain.member.dto.MemberDTO;
 import com.example.elasticsearch.domain.member.entity.Member;
 import com.example.elasticsearch.domain.member.repository.MemberRepository;
-import com.example.elasticsearch.global.jwt.JwtProvider;
+import com.example.elasticsearch.global.jwt.JwtService;
 import com.example.elasticsearch.global.rsData.RsData;
 import com.example.elasticsearch.global.security.SecurityUser;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +26,8 @@ import java.util.Map;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtProvider jwtProvider;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     public MemberDTO memberJoin(String username, String password) {
         Member checkedMember = this.memberRepository.findByUsername(username).orElse(null);
@@ -34,7 +39,7 @@ public class MemberService {
                 .password(passwordEncoder.encode(password))
                 .build();
 
-        String refreshToken = this.jwtProvider.genRefreshToken(new MemberDTO(member));
+        String refreshToken = this.jwtService.createRefreshToken(member.getUsername());
         member.toBuilder()
                 .refreshToken(refreshToken)
                 .build();
@@ -65,12 +70,19 @@ public class MemberService {
     }
 
     public boolean validateToken (String accessToken) {
-        return this.jwtProvider.verify(accessToken);
+        return this.jwtService.isValid(accessToken);
     }
 
     public RsData<String> refreshAccessToken (String refreshToken) {
         Member member = this.memberRepository.findByRefreshToken(refreshToken).orElseThrow(RuntimeException::new);
-        String accessToken = this.jwtProvider.genAccessToken(new MemberDTO(member));
+        Authentication auth = this.authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        member.getUsername(),
+                        member.getPassword()
+                )
+        );
+        Collection<? extends GrantedAuthority> auths = auth.getAuthorities();
+        String accessToken = this.jwtService.createAccessToken(member.getUsername(), auths);
         return RsData.of(
                 "200",
                 "토큰 갱신 성공",
@@ -78,7 +90,7 @@ public class MemberService {
         );
     }
 
-    public SecurityUser getUserFromAccessToken(String accessToken) {
+    /*public SecurityUser getUserFromAccessToken(String accessToken) {
         Map<String, Object> payloadBody = jwtProvider.getClaims(accessToken);
 
         long id = (int) payloadBody.get("id");
@@ -86,5 +98,5 @@ public class MemberService {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
         return new SecurityUser(id, username, "", authorities);
-    }
+    }*/
 }
