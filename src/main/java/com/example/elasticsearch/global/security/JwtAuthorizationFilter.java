@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -21,10 +22,17 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final HttpServletRequest req;
     private final HttpServletResponse resp;
     private final MemberService memberService;
+    private static final List<String> WHITE_LIST = List.of(
+            "/api/v1/members/login",
+            "/api/v1/members/logout",
+            "/api/v1/members/join"
+    );
+
     @Override
     @SneakyThrows
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
-        if (request.getRequestURI().equals("/api/v1/members/login") || request.getRequestURI().equals("/api/v1/members/logout")) {
+        String uri = request.getRequestURI();
+        if (WHITE_LIST.contains(uri)) {
             filterChain.doFilter(request, response);
             return;
         }
