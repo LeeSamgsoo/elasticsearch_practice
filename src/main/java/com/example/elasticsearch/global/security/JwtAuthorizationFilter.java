@@ -24,7 +24,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private final MemberService memberService;
     private static final List<String> WHITE_LIST = List.of(
             "/api/v1/members/login",
-            "/api/v1/members/logout",
             "/api/v1/members/join"
     );
 
