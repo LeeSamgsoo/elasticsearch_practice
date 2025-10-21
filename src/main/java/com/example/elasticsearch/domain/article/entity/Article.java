@@ -3,6 +3,7 @@ package com.example.elasticsearch.domain.article.entity;
 import com.example.elasticsearch.domain.member.entity.Member;
 import com.example.elasticsearch.global.jpa.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,6 @@ public class Article extends BaseEntity {
     private String title;
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 }

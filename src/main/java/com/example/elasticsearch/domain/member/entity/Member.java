@@ -1,14 +1,16 @@
 package com.example.elasticsearch.domain.member.entity;
 
+import com.example.elasticsearch.domain.article.entity.Article;
 import com.example.elasticsearch.global.jpa.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,4 +25,6 @@ public class Member extends BaseEntity {
     private String password;
     @JsonIgnore
     private String refreshToken;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Article> articles;
 }
